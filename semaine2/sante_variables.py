@@ -116,11 +116,11 @@ m5_valeur_stock = m5_stock*m5_cout_unitaire
 # === SECTION D : CALCULS D'INITIALISATION
 nb_total_medecins = h1_nb_medecins+h2_nb_lits_occupes+h3_nb_medecins+h4_nb_medecins+h5_nb_medecins
 pop_generale = h1_population_zone+h2_population_zone+h3_population_zone+h4_population_zone+h5_population_zone
-densite_medicale_nationale = (nb_total_medecins/int(pop_generale))*100
+densite_medicale_nationale = round((nb_total_medecins/int(pop_generale))*100,2)
 # calcul intermédiaire pour le calcul du taux moyen d'occupation
 nb_total_lits = h1_nb_lits+h2_nb_lits+h3_nb_lits+h4_nb_lits+h5_nb_lits  # Nombre total de lits
 nb_total_lits_occupes = h1_nb_lits_occupes+h2_nb_lits_occupes+h3_nb_lits_occupes+h4_nb_lits_occupes+h5_nb_lits_occupes
-taux_moyen_occupation = (nb_total_lits_occupes/nb_total_lits)*100
+taux_moyen_occupation = round((nb_total_lits_occupes/nb_total_lits)*100,2)
 
 valeur_total_stock = m1_valeur_stock+m2_valeur_stock+m3_valeur_stock+m4_valeur_stock+m5_valeur_stock
 
@@ -298,6 +298,40 @@ else:
     m5_couleur = '[VERT]'
     m5_action  = 'Situation normale — suivi standard'
 
+# Comptage des alertes
+nb_ruptures_critiques = 0 
+if m1_statut == 'RUPTURE CRITIQUE': nb_ruptures_critiques = nb_ruptures_critiques + 1
+if m2_statut == 'RUPTURE CRITIQUE': nb_ruptures_critiques = nb_ruptures_critiques + 1
+if m3_statut == 'RUPTURE CRITIQUE': nb_ruptures_critiques = nb_ruptures_critiques + 1
+if m4_statut == 'RUPTURE CRITIQUE': nb_ruptures_critiques = nb_ruptures_critiques + 1
+if m5_statut == 'RUPTURE CRITIQUE': nb_ruptures_critiques = nb_ruptures_critiques + 1
+
+nb_alertes_stock = 0
+if m1_statut == 'ALERTE STOCK': nb_alertes_stock = nb_alertes_stock + 1
+if m2_statut == 'ALERTE STOCK': nb_alertes_stock = nb_alertes_stock + 1
+if m3_statut == 'ALERTE STOCK': nb_alertes_stock = nb_alertes_stock + 1
+if m4_statut == 'ALERTE STOCK': nb_alertes_stock = nb_alertes_stock + 1
+if m5_statut == 'ALERTE STOCK': nb_alertes_stock = nb_alertes_stock + 1
+
+nb_stock_limite = 0
+if m1_statut == 'STOCK LIMITE': nb_stock_limite = nb_stock_limite + 1
+if m2_statut == 'STOCK LIMITE': nb_stock_limite = nb_stock_limite + 1
+if m3_statut == 'STOCK LIMITE': nb_stock_limite = nb_stock_limite + 1
+if m4_statut == 'STOCK LIMITE': nb_stock_limite = nb_stock_limite + 1
+if m5_statut == 'STOCK LIMITE': nb_stock_limite = nb_stock_limite + 1
+
+nb_stock_normal = 0
+if m1_statut == 'STOCK NORMAL': nb_stock_normal = nb_stock_normal + 1
+if m2_statut == 'STOCK NORMAL': nb_stock_normal = nb_stock_normal + 1
+if m3_statut == 'STOCK NORMAL': nb_stock_normal = nb_stock_normal + 1
+if m4_statut == 'STOCK NORMAL': nb_stock_normal = nb_stock_normal + 1
+if m5_statut == 'STOCK NORMAL': nb_stock_normal = nb_stock_normal + 1
+
+# Méssage d'alerte
+message_alerte = f""" Attention : 
+- {nb_ruptures_critiques} médicaments en rupture critique !
+- {nb_alertes_stock} médicaments en alerte de stock !
+- {nb_stock_limite} médicaments en limite de stock !"""
 
 # SECTION G : Classification du niveau d'occupation de chacun des 5 hopitaux
 # CHU
@@ -430,6 +464,7 @@ print(f"""Statut des médicaments
      {m3_nom} : {m3_statut}
      {m4_nom} : {m4_statut}
      {m5_nom} : {m5_statut}""")
+print(message_alerte)
 print(f"""Niveau d'occupation des 5 hôpitaux
      {h1_nom} : {h1_niveau_occupation}
      {h2_nom} : {h2_niveau_occupation}
@@ -437,10 +472,10 @@ print(f"""Niveau d'occupation des 5 hôpitaux
      {h4_nom} : {h4_niveau_occupation}
      {h5_nom} : {h5_niveau_occupation}""")
 print(f"""Couverture vaccinale par département
-     {dep1_nom} : {dep1_couverture} {dep1_statut}
-     {dep2_nom} : {dep2_couverture} {dep2_statut}
-     {dep3_nom} {dep3_couverture} {dep3_statut}
-     {dep4_nom} : {dep4_couverture} {dep4_statut}""")
+     {dep1_nom} : {dep1_couverture}% [{dep1_statut}]
+     {dep2_nom} : {dep2_couverture}% [{dep2_statut}]
+     {dep3_nom} {dep3_couverture}% [{dep3_statut}]
+     {dep4_nom} : {dep4_couverture}% [{dep4_statut}]""")
 print("-"*70)
 input("Résumé exécutif :")
 print("="*70)

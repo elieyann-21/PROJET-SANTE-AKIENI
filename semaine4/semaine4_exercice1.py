@@ -23,8 +23,11 @@ for i in district_sanitaire:
     print("-"*60)
     print('District sanitaire :',Nom_district)
     nb_suspects = int(input('Nombre de cas suspects :'))
+    total_suspects = total_suspects + nb_suspects
     nb_confirmes = int(input('Nombre de cas confirmés :'))
+    total_confirme = total_confirme + nb_confirmes
     nb_deces = int(input('Nombre de décès :'))
+    total_deces = total_deces + nb_deces
     cas_actifs = nb_confirmes - nb_deces
     print('Nombre de cas actifs :', cas_actifs)
     taux_letalite = (nb_deces/nb_confirmes)*100
@@ -32,36 +35,33 @@ for i in district_sanitaire:
     if nb_confirmes ==1:
         alerte = 'VERT'
         action = 'Surveillance standard'
+        total_vert = total_vert + len(['VERT'])
         print(f"""Alerte : {alerte}
 Action recommandée : {action}""")
     elif nb_confirmes >= 2 and nb_confirmes <=4:
         alerte = 'JAUNE'
         action = 'Renforcer la surveillance'
+        total_jaune = total_jaune + len(['JAUNE'])
         print(f"""Alerte : {alerte}
 Action recommandée : {action}""")
     elif nb_confirmes >= 5 and nb_confirmes <= 9:
         alerte = 'ORANGE'
         action = "Envoyer une équipe d'intervention"
+        total_orange = total_orange + len(['ORANGE'])
         print(f"""Alerte : {alerte}
 Action recommandée : {action}""")
     else:
         alerte = 'ROUGE'
         action = 'URGENCE - intervention immédiate'
+        total_rouge = total_rouge + len(['ROUGE'])
         print(f"""Alerte : {alerte}
 Action recommandée : {action}""")
 
 print('='*70)
 print('Rapport de surveillance épidémiologique nationale - Mpox Congo')
-total_suspects = sum(nb_suspects[i])
-total_confirme = sum(nb_confirmes[i])
-total_deces = sum(nb_deces[i])
-total_actif = sum(cas_actifs[i])
-total_letalite = (total_deces/total_actif)*100
-total_vert = sum(alerte=='VERT')
-total_jaune = sum(alerte=='JAUNE')
-total_orange = sum(alerte=='ORANGE')
-total_rouge = sum(alerte=='ROUGE')
-print(f""" Nombre de cas suspect : {total_suspects}
+total_actif = total_confirme - total_deces
+total_letalite = (total_deces/total_confirme)*100
+print(f"""  Nombre de cas suspect : {total_suspects}
     Nombre de cas confirmés : {total_confirme}
     Nombre de décès : {total_deces}
     Nombre de cas actif : {total_actif}
