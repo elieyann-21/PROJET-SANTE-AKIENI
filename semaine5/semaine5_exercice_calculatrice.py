@@ -20,6 +20,8 @@ while operateur not in ['add','sous','mul','div']:
 
 # définition de la fonction d'addition
 def addition():
+    """La fonction addition permet 
+    d'additionner deux entiers naturel"""
     num1 = float(input("chiffre 1 :"))
     num2 = float(input("chiffre 2 :"))
     addition = num1 + num2
@@ -27,6 +29,7 @@ def addition():
 
 # définition de la fonction de soustraction
 def soustraction():
+    """La fonction soustraction permet de soustraire deux entiers"""
     num1 = float(input("chiffre 1 :"))
     num2 = float(input("chiffe 2 "))
     soustraction = num1 - num2
@@ -34,6 +37,7 @@ def soustraction():
 
 # définition de la fonction de multification
 def multiplication():
+    """La fonction multiplication permet de multiplier deux entiers"""
     num1 = float(input("chiffre 1 :"))
     num2 = float(input("chiffre 2 :"))
     multiplication = num1 * num2
@@ -41,6 +45,7 @@ def multiplication():
 
 # définition de la fonction de division
 def division():
+    """La fonction division permet de multiplier deux entiers"""
     num1 = float(input("chiffre 1"))
     num2 = float(input("chiffre 2 :"))
     while num2 == 0: # pour le cas où le dénominateur est 0
