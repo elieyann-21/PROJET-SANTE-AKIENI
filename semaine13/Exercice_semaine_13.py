@@ -130,7 +130,72 @@ print(
 )  # Rechercher la ligne correspondant au pays "Congo" dans la colonne iso3
 DataBase["country"] = DataBase[
     "country"
-].str.capitalize()  # Met en majuscule la première lettre de chaque mot dans la colonne country
+].str.strip().str.capitalize()  # Met en majuscule la première lettre de chaque mot dans la colonne country
 print(
-    DataBase["country"] == "Congo"
+    DataBase.loc[DataBase["iso3"] == "COG"]
 )  # Vérifie si le pays "Congo" est présent dans la colonne country après la mise en majuscule
+
+#-------------------------------------------------
+# Exercice 6 - déja répondu à la question 1
+
+
+#-------------------------------------------------
+# Exercice 7 - déja répondu à la question 1
+# a) Un collègue n'a besoin que du nom du pays, du continent et de l'espérance de vie - pas du reste du 
+#fichier. Préparez cet extrait
+
+DataBase_col = DataBase[["country", "continent", "lifeExp"]]
+# b) Il vous demande ensuite un aperçu des 5 premiers pays du fichier : une fois avec toutes leurs 
+# colonnes, une fois avec seulement le nom du pays et sa population. 
+print(DataBase.head(5))  # Affiche les 5 premières lignes du DataFrame
+print(DataBase[["country", "pop"]].head(5))  # Affiche les 5 premières lignes du DataFrame avec seulement le nom du pays et sa population
+
+# c) Enfin, il veut la liste des pays de plus de 100 millions d'habitants, du plus peuplé au moins peuplé. 
+country_pop100 = DataBase[DataBase["pop"] > 100000000][["country", "pop"]].sort_values(by="pop", ascending=False)  # Filtre les pays avec une population supérieure à 100 millions et trie par population décroissante
+print(country_pop100)
+
+# -------------------------------------------------
+# Exercice 8 - La richesse « typique » d'un pays africain
+DataBase_PIB_Afric = DataBase[DataBase["continent"] == "Africa"][["country", "gdpPercap"]].sort_values(by = "gdpPercap", ascending= False) # Filtre les pays d'Afrique et trie par PIB par habitant décroissant
+print(sum(DataBase_PIB_Afric["gdpPercap"])/len(DataBase_PIB_Afric)) # Affiche le PIB moyen par habitant des pays d'Afrique
+print(DataBase_PIB_Afric["gdpPercap"].median())
+
+print(f"Le PIB moyen par habitant des pays d'Afrique est de {round(sum(DataBase_PIB_Afric['gdpPercap'])/len(DataBase_PIB_Afric), 2)
+} $ et le PIB médian par habitant est de {round(DataBase_PIB_Afric['gdpPercap'].median(), 2)} $. soit un écart de {round(sum(DataBase_PIB_Afric['gdpPercap'])/len(DataBase_PIB_Afric) - DataBase_PIB_Afric['gdpPercap'].median(), 2)} $ entre les deux indicateurs.")
+
+#-------------------------------------------------
+# Exercice 9 - Espérance de vie moyenne et écart type
+# Afrique
+# Exercice 9
+DataBase_lifeExp_Africa = DataBase[(DataBase["continent"] == "Africa")][["country", "lifeExp"]] 
+print(DataBase_lifeExp_Africa["lifeExp"].mean())
+print(DataBase_lifeExp_Africa["lifeExp"].std())
+
+# Europe
+DataBase_lifeExp_Europe = DataBase[(DataBase["continent"] == "Europe")][["country", "lifeExp"]] 
+print(DataBase_lifeExp_Europe["lifeExp"].mean())
+print(DataBase_lifeExp_Europe["lifeExp"].std())
+
+print(f"L'espérance de vie moyenne en Afrique est de {round(DataBase_lifeExp_Africa['lifeExp'].mean(), 2)} ans avec un écart type de {round(DataBase_lifeExp_Africa['lifeExp'].std(), 2)} ans. En Europe, l'espérance de vie moyenne est de {round(DataBase_lifeExp_Europe['lifeExp'].mean(), 2)} ans avec un écart type de {round(DataBase_lifeExp_Europe['lifeExp'].std(), 2)} ans.")
+
+# ---------------------------------------------------------
+# Exercice 10 - Comparaison de l'espérance de vie et du PIB par habitant entre le Congo et la République Démocratique du Congo
+DataBase_congo = DataBase[(DataBase["iso3"] == "COG") | (DataBase["iso3"] == "COD")][["country", "lifeExp", "gdpPercap", "pop"]]
+print(DataBase_congo)   
+
+#---------------------------------------------------------
+# Exercice 11 - Espérance de vie moyenne et espérance de vie pondérée par la population
+Esperance_vie_moyenne = round(DataBase["lifeExp"].mean(), 2)
+Esperance_vie_ponderee = round((DataBase["lifeExp"] * DataBase["pop"]).sum() / DataBase["pop"].sum(), 2)
+print(f"L'espérance de vie moyenne est de {Esperance_vie_moyenne} ans et l'espérance de vie pondérée par la population est de {Esperance_vie_ponderee} ans. L'écart entre les deux indicateurs est de {round(Esperance_vie_ponderee - Esperance_vie_moyenne, 2)} ans.")
+
+#---------------------------------------------------------
+# Exercice 12 - Corrélation entre l'espérance de vie et le PIB par habitant
+corr = DataBase[["lifeExp", "gdpPercap"]].corr()
+print(f"La corrélation entre l'espérance de vie et le PIB par habitant est de {round(corr.loc['lifeExp', 'gdpPercap'], 2)}. Cela indique une corrélation positive entre les deux variables, ce qui signifie que les pays avec un PIB par habitant plus élevé ont tendance à avoir une espérance de vie plus longue.")
+
+# ---------------------------------------------------------
+# Exercice 13 - Restitution écrite 
+# En 5 à 8 phrases, rédigez une synthèse destinée à quelqu'un qui découvre ce jeu de données. Utilisez 
+# au moins 4 chiffres que vous avez calculés vous-même, et au moins 3 des mots suivants : moyenne, 
+# médiane, écart-type, biais, corrélation, valeur aberrante.
